@@ -109,7 +109,7 @@ export default function Calculator() {
             <img 
               src="/logo.svg" 
               alt="Logo" 
-              className="w-16 h-16" 
+              className="w-20 h-20" 
               onClick={handleLogoClick}
               style={{ cursor: 'pointer' }}
             />
