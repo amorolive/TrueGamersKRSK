@@ -12,7 +12,7 @@ import {
   type Tariff 
 } from "@shared/schema";
 
-type Zone = "normal" | "vip" | "premium";
+type Zone = "normal" | "vip" | "bootcamp" | "tv";
 
 export default function Calculator() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -76,9 +76,9 @@ export default function Calculator() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-4 lg:px-8 py-4 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 lg:px-8 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Logo" className="w-10 h-10" />
+            <img src="/logo.svg" alt="Logo" className="w-16 h-16" />
           </div>
           
           <div className="flex items-center gap-4">
@@ -138,12 +138,18 @@ export default function Calculator() {
                   disabled
                   className="px-4 py-2 rounded-md text-sm font-medium bg-muted/50 text-muted-foreground/50 cursor-not-allowed"
                 >
-                  Premium
+                  Bootcamp
+                </button>
+                <button
+                  disabled
+                  className="px-4 py-2 rounded-md text-sm font-medium bg-muted/50 text-muted-foreground/50 cursor-not-allowed"
+                >
+                  TV
                 </button>
               </div>
             </div>
             <h2 className="text-2xl font-semibold mb-2">
-              Зона {selectedZone === "normal" ? "Normal" : selectedZone === "vip" ? "VIP" : "Premium"}
+              Зона {selectedZone === "normal" ? "Normal" : selectedZone === "vip" ? "VIP" : selectedZone === "bootcamp" ? "Bootcamp" : "TV"}
             </h2>
             <p className="text-sm text-muted-foreground">
               Укажите время и узнайте оптимальные варианты
@@ -205,7 +211,7 @@ export default function Calculator() {
                       className="font-mono text-3xl lg:text-4xl font-bold text-primary drop-shadow-[0_0_12px_rgba(0,191,255,0.6)]"
                       data-testid="text-calculated-price"
                     >
-                      {optimalCombination.totalPrice} ₽
+                      {optimalCombination.totalPrice}₽
                     </p>
                   </div>
                   <Badge variant="outline" className="h-fit">
@@ -231,7 +237,7 @@ export default function Calculator() {
                         </p>
                       </div>
                       <p className="font-mono font-semibold text-lg ml-4">
-                        {segment.price} ₽
+                        {segment.price}₽
                       </p>
                     </div>
                   ))}
@@ -340,7 +346,7 @@ export default function Calculator() {
                               : ""
                             : ""
                         }`}>
-                          {weekdayPrice} ₽
+                          {weekdayPrice}₽
                         </p>
                       </div>
                       <div className="w-px h-10 bg-border" />
@@ -355,7 +361,7 @@ export default function Calculator() {
                               : ""
                             : ""
                         }`}>
-                          {weekendPrice} ₽
+                          {weekendPrice}₽
                         </p>
                       </div>
                     </div>
