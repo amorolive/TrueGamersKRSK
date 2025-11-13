@@ -352,28 +352,6 @@ export default function Calculator() {
               const isAvailable = isTariffAvailable(tariff, currentHour);
               const weekdayPrice = tariff.priceWeekday;
               const weekendPrice = tariff.priceWeekend;
-              
-              const endTime = new Date(effectiveTime.getTime() + totalMinutes * 60000);
-              
-              let sessionReachesCyberNightWindow = false;
-              if (totalMinutes > 0) {
-                const currentHourValue = effectiveTime.getHours();
-                
-                if (currentHourValue >= 22 || currentHourValue < 3) {
-                  sessionReachesCyberNightWindow = true;
-                } else {
-                  const next22Today = new Date(effectiveTime);
-                  next22Today.setHours(22, 0, 0, 0);
-                  
-                  if (endTime >= next22Today) {
-                    sessionReachesCyberNightWindow = true;
-                  }
-                }
-              }
-              
-              const doesNotReachAvailableTime = tariff.id === "cyber-night" && 
-                totalMinutes > 0 && 
-                !sessionReachesCyberNightWindow;
 
               return (
                 <Card
@@ -394,17 +372,10 @@ export default function Calculator() {
                           <p className="text-sm text-muted-foreground">
                             {tariff.perMinute
                               ? tariff.description
-                              : tariff.description 
-                                ? "" 
-                                : `${Math.floor(tariff.duration / 60)}ч`}
+                              : `${Math.floor(tariff.duration / 60)}ч`}
                           </p>
                         </div>
                       </div>
-                      {doesNotReachAvailableTime && (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-destructive/20">
-                          <AlertCircle className="w-5 h-5 text-destructive" />
-                        </div>
-                      )}
                     </div>
 
                     {tariff.description && !tariff.perMinute && (
@@ -413,19 +384,10 @@ export default function Calculator() {
                       </p>
                     )}
 
-                    {!isAvailable && !doesNotReachAvailableTime && (
+                    {!isAvailable && (
                       <Badge variant="destructive" className="text-xs">
                         Доступно с {tariff.availableFrom}:00 до {tariff.availableTo}:00
                       </Badge>
-                    )}
-                    
-                    {doesNotReachAvailableTime && (
-                      <div className="flex items-start gap-2 p-2 bg-destructive/10 rounded-md border border-destructive/20">
-                        <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
-                        <p className="text-xs text-destructive">
-                          Выбранное время не достигает 22:00
-                        </p>
-                      </div>
                     )}
 
                     <div className="flex items-center gap-4">

@@ -142,9 +142,9 @@ export function isTariffAvailable(tariff: Tariff, currentHour: number): boolean 
   
   if (tariff.availableFrom !== undefined && tariff.availableTo !== undefined) {
     if (tariff.availableFrom > tariff.availableTo) {
-      return currentHour >= tariff.availableFrom || currentHour <= tariff.availableTo;
+      return currentHour >= tariff.availableFrom || currentHour < tariff.availableTo;
     }
-    return currentHour >= tariff.availableFrom && currentHour <= tariff.availableTo;
+    return currentHour >= tariff.availableFrom && currentHour < tariff.availableTo;
   }
   
   return true;
@@ -218,34 +218,9 @@ export function findOptimalCombination(
 ): TariffCombination | null {
   if (requestedMinutes <= 0) return null;
 
-  const availableTariffs = NORMAL_ZONE_TARIFFS.filter(t => {
-    if (!isTariffAvailable(t, currentHour)) {
-      return false;
-    }
-    
-    if (t.id === "cyber-night" && startDate && requestedMinutes > 0) {
-      const endTime = new Date(startDate.getTime() + requestedMinutes * 60000);
-      const currentHourValue = startDate.getHours();
-      
-      let sessionReachesCyberNightWindow = false;
-      if (currentHourValue >= 22 || currentHourValue < 3) {
-        sessionReachesCyberNightWindow = true;
-      } else {
-        const next22Today = new Date(startDate);
-        next22Today.setHours(22, 0, 0, 0);
-        
-        if (endTime >= next22Today) {
-          sessionReachesCyberNightWindow = true;
-        }
-      }
-      
-      if (!sessionReachesCyberNightWindow) {
-        return false;
-      }
-    }
-    
-    return true;
-  });
+  const availableTariffs = NORMAL_ZONE_TARIFFS.filter(t => 
+    isTariffAvailable(t, currentHour)
+  );
 
   if (availableTariffs.length === 0) return null;
 
